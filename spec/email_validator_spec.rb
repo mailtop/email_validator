@@ -198,4 +198,12 @@ describe EmailValidator do
       end
     end
   end
+  
+  context "when hyphen is first character in email address" do
+    it "'--contact@example.com should be invalid" do
+      expect(
+        EmailValidator.valid? '--contact@example.com', { strict_mode: true }
+      ).to be_falsy
+    end
+  end
 end

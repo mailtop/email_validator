@@ -12,7 +12,10 @@ class EmailValidator < ActiveModel::EachValidator
   end
 
   def self.valid?(value, options = {})
-    !!(value =~ regexp(options))
+    validation = !!(value =~ regexp(options))
+    
+    return false if validation.present? && value.start_with?('-')
+    return validation
   end
 
   def self.default_options
