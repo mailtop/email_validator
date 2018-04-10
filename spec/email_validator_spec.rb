@@ -206,4 +206,44 @@ describe EmailValidator do
       ).to be_falsy
     end
   end
+
+  context "when hyphen is the last character in email address" do
+    it "contact@example.com-- should be invalid" do
+      expect(
+        EmailValidator.valid? 'contact@example.com--', { strict_mode: true }
+      ).to be_falsy
+    end
+  end
+
+  context "when hyphen is followed by a dot" do
+    it "contact@example-.com should be invalid" do
+      expect(
+        EmailValidator.valid? 'contact@example-.com', { strict_mode: true }
+      ).to be_falsy
+    end
+  end
+
+  context "when dot is followed by a hyphen" do
+    it "contact@example.-com should be invalid" do
+      expect(
+        EmailValidator.valid? 'contact@example.-com', { strict_mode: true }
+      ).to be_falsy
+    end
+  end
+
+  context "when hyphen is followed by a at sign" do
+    it "contact-@example.com should be invalid" do
+      expect(
+        EmailValidator.valid? 'contact-@example.com', { strict_mode: true }
+      ).to be_falsy
+    end
+  end
+
+  context "when at sign is followed by a hyphen" do
+    it "contact@-example.com should be invalid" do
+      expect(
+        EmailValidator.valid? 'contact@-example.com', { strict_mode: true }
+      ).to be_falsy
+    end
+  end
 end

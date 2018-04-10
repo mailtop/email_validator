@@ -15,6 +15,11 @@ class EmailValidator < ActiveModel::EachValidator
     validation = !!(value =~ regexp(options))
     
     return false if validation.present? && value.start_with?('-')
+    return false if validation.present? && value.include?('-.') && options[:strict_mode]
+    return false if validation.present? && value.include?('.-') && options[:strict_mode]
+    return false if validation.present? && value.include?('-@') && options[:strict_mode]
+    return false if validation.present? && value.include?('@-') && options[:strict_mode]
+    return false if validation.present? && value.end_with?('-')
     return validation
   end
 
