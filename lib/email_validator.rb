@@ -13,14 +13,11 @@ class EmailValidator < ActiveModel::EachValidator
 
   def self.valid?(value, options = {})
     validation = !!(value =~ regexp(options))
-    
-    return false if validation.present? && value.start_with?('-')
-    return false if validation.present? && value.include?('-.') && options[:strict_mode]
-    return false if validation.present? && value.include?('.-') && options[:strict_mode]
-    return false if validation.present? && value.include?('-@') && options[:strict_mode]
-    return false if validation.present? && value.include?('@-') && options[:strict_mode]
-    return false if validation.present? && value.end_with?('-')
-    return validation
+
+    custom_regex = '^(\d)\1{4}|^(([^\w\s*])|danfe|nfe|wwww\.|webmaster)|((^-)|-\.|\.-|-@|@-|(-$))'
+    return false if validation.present? && value.match(custom_regex).present?
+      
+    validation
   end
 
   def self.default_options

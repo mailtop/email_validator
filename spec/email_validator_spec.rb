@@ -49,7 +49,6 @@ describe EmailValidator do
         "nigel.worthington@big.co.uk",
         "f@c.com",
         "areallylongnameaasdfasdfasdfasdf@asdfasdfasdfasdfasdf.ab.cd.ef.gh.co.ca",
-        "ящик@яндекс.рф"
       ].each do |email|
 
         it "#{email.inspect} should be valid" do
@@ -131,7 +130,7 @@ describe EmailValidator do
         "hans(peter@example.com",
         "hans)peter@example.com",
         "partially.\"quoted\"@sld.com",
-        "&'*+-./=?^_{}~@other-valid-characters-in-local.net",
+        "a&'*-+./=?^_{}~@other-valid-characters-in-local.net",
         "mixed-1234-in-{+^}-local@sld.net"
       ].each do |email|
 
@@ -244,6 +243,123 @@ describe EmailValidator do
       expect(
         EmailValidator.valid? 'contact@-example.com', { strict_mode: true }
       ).to be_falsy
+    end
+  end
+
+  describe "custom_regex" do
+    subject { EmailValidator.valid? email }    
+
+    context "when emails start with 'danfe'" do
+      let(:email) { "danfe@example.com" }
+
+      it "should be invalid" do
+        expect(subject).to be_falsy
+      end
+    end
+
+    context "when the email has the word 'danfe', but doesn't start with it" do
+      let(:email) { "john_danfe@example.com" }
+
+      it "should be valid" do
+        expect(subject).to be_truthy
+      end
+    end
+
+    context "when emails start with 'nfe'" do
+      let(:email) { "nfe@example.com" }
+
+      it "should be invalid" do
+        expect(subject).to be_falsy
+      end
+    end
+
+    context "when the email has the word 'nfe', but doesn't start with it" do
+      let(:email) { "john_nfe@example.com" }
+
+      it "should be valid" do
+        expect(subject).to be_truthy
+      end
+    end
+
+    context "when emails start with 'wwww.'" do
+      let(:email) { "wwww.@example.com" }
+
+      it "should be invalid" do
+        expect(subject).to be_falsy
+      end
+    end
+
+    context "when the email has the word 'wwww.', but doesn't start with it" do
+      let(:email) { "john_wwww.@example.com" }
+
+      it "should be valid" do
+        expect(subject).to be_truthy
+      end
+    end
+
+    context "when emails start with 'webmaster'" do
+      let(:email) { "webmaster@example.com" }
+
+      it "should be invalid" do
+        expect(subject).to be_falsy
+      end
+    end
+
+    context "when the email has the word 'webmaster', but doesn't start with it" do
+      let(:email) { "john_webmaster@example.com" }
+
+      it "should be valid" do
+        expect(subject).to be_truthy
+      end
+    end    
+
+    context "when emails start with '-'" do
+      let(:email) { "danfe@example.com" }
+
+      it "should be invalid" do
+        expect(subject).to be_falsy
+      end
+    end
+
+    context "when the email has the char '-', but doesn't start with it" do
+      let(:email) { "john_danfe@example.com" }
+
+      it "should be valid" do
+        expect(subject).to be_truthy
+      end
+    end
+
+    context "when emails end with '-'" do
+      let(:email) { "danfe@example.com" }
+
+      it "should be invalid" do
+        expect(subject).to be_falsy
+      end
+    end
+
+    context "when the email has the char '-', but doesn't end with it" do
+      let(:email) { "john_danfe@example.com" }
+
+      it "should be valid" do
+        expect(subject).to be_truthy
+      end
+    end
+
+    context "when emails start with special char" do
+      let(:email) { "-john@example.com" }
+
+      it "should be invalid" do
+        expect(subject).to be_falsy
+      end
+    end
+
+    context "when emails start with same number repeated 5 times" do
+      it "should be valid" do
+        [*0..9].each do |n|
+          email = "#{n.to_s * 5}@example.com"
+          expect(EmailValidator.valid? email).to be_falsy
+        end
+      end
     end
   end
 end
