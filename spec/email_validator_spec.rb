@@ -361,5 +361,29 @@ describe EmailValidator do
         end
       end
     end
+
+    context "when domain is @bradesco.com.br" do
+      let(:email) { "john@bradesco.com.br" }
+
+      it "should be invalid" do
+        expect(subject).to be_falsy
+      end
+    end
+
+    context "when domain is @itau.com.br" do
+      let(:email) { "john@itau.com.br" }
+
+      it "should be invalid" do
+        expect(subject).to be_falsy
+      end
+    end
+
+    context "when domain is @bb.com.br" do
+      let(:email) { "john@bb.com.br" }
+
+      it "should be invalid" do
+        expect(subject).to be_falsy
+      end
+    end
   end
 end

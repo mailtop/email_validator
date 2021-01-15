@@ -14,7 +14,9 @@ class EmailValidator < ActiveModel::EachValidator
   def self.valid?(value, options = {})
     validation = !!(value =~ regexp(options))
 
-    custom_regex = '^(\d)\1{4}|^(([^\w\s*])|danfe|nfe|wwww\.|webmaster)|((^-)|-\.|\.-|-@|@-|(-$))'
+    custom_regex = '^(\d)\1{4}|^(([^\w\s*])|danfe|nfe|wwww\.|webmaster)|((^-)|-\.|\.-|-@|@-|(-$)'\
+                   '|(@bradesco.com.br$)|(@bb.com.br$)|(@itau.com.br$))'
+
     return false if validation.present? && value.match(custom_regex).present?
       
     validation
